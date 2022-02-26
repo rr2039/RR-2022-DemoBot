@@ -12,6 +12,7 @@ import frc.robot.commands.drivetrain.DriveDistance;
 import frc.robot.commands.drivetrain.TurnDegree;
 import frc.robot.commands.intake.IntakeOff;
 import frc.robot.commands.intake.IntakeOn;
+import frc.robot.commands.intake.PickUpBall;
 import frc.robot.commands.queuing.ShooterFeedOff;
 import frc.robot.commands.queuing.ShooterFeedOn;
 import frc.robot.commands.shooter.AimAtTarget2_0;
@@ -33,14 +34,16 @@ public class MacDaddyAuto extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new DriveDistance(m_drivetrain, -Preferences.getDouble("Distance", 18)),
-        new IntakeOn(m_intake, m_queuing)
+        new PickUpBall(m_intake, m_queuing)
       ),
-      new WaitCommand(0.95),
-      new DriveDistance(m_drivetrain, -Preferences.getDouble("Distance", 18)),
-      new WaitCommand(0.95),
-      new DriveDistance(m_drivetrain, -Preferences.getDouble("Distance", 18)),
-      new WaitCommand(0.95),
-      new IntakeOff(m_intake, m_queuing),
+      new ParallelCommandGroup(
+        new DriveDistance(m_drivetrain, -Preferences.getDouble("Distance", 18)),
+        new PickUpBall(m_intake, m_queuing)
+      ),
+      new ParallelCommandGroup(
+        new DriveDistance(m_drivetrain, -Preferences.getDouble("Distance", 18)),
+        new PickUpBall(m_intake, m_queuing)
+      ),
       new TurnDegree(m_drivetrain, -75).withTimeout(1.5),
       new AimAtTarget2_0(m_shooter), 
       new ShooterSpeedFromDistance(m_shooter),

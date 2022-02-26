@@ -23,6 +23,7 @@ import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.intake.IntakeOff;
 import frc.robot.commands.intake.IntakeOn;
 import frc.robot.commands.intake.IntakeUp;
+import frc.robot.commands.intake.PickUpBall;
 import frc.robot.commands.queuing.QueuingOff;
 import frc.robot.commands.queuing.QueuingOn;
 import frc.robot.commands.queuing.ShooterFeedOff;
@@ -109,8 +110,9 @@ public class RobotContainer {
     B6.whenPressed(new IntakeUp(m_intake));
 
     AxisButton rightTrigger = new AxisButton(driverController, 3, 0.1, 0);
-    rightTrigger.whenPressed(new IntakeOn(m_intake, m_queuing));
-    rightTrigger.whenReleased(new IntakeOff(m_intake, m_queuing));
+    //rightTrigger.whenPressed(new IntakeOn(m_intake, m_queuing));
+    //rightTrigger.whenReleased(new IntakeOff(m_intake, m_queuing));
+    rightTrigger.whenPressed(new PickUpBall(m_intake, m_queuing));
 
     AxisButton leftTrigger = new AxisButton(driverController, 2, 0.1, 0);
     leftTrigger.whenPressed(new AutoAimAndShoot(m_shooter));

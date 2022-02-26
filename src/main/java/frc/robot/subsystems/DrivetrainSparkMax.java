@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -11,6 +12,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,11 +32,11 @@ public class DrivetrainSparkMax extends SubsystemBase implements Drivetrain {
   SparkMaxPIDController leftPID = null;
   SparkMaxPIDController rightPID = null;
 
-  AnalogGyro drivetrainGyro = null;
+  AHRS drivetrainGyro = null;
 
   DifferentialDrive differentialDrive = null;
 
-  double openRampRate = 0.5;
+  double openRampRate = 0.2;
   double closedRampRate = 2.0;
 
   /** Creates a new DrivetrainSparkMax. */
@@ -67,8 +69,9 @@ public class DrivetrainSparkMax extends SubsystemBase implements Drivetrain {
     rightSpark2.follow(rightSpark1);
     leftSpark1.setInverted(true);
 
-    drivetrainGyro = new AnalogGyro(0);
-    drivetrainGyro.setSensitivity(Constants.GYRO_kVoltsPerDegreePerSecond);
+    drivetrainGyro = new AHRS(SerialPort.Port.kUSB);
+    //drivetrainGyro.setSensitivity(Constants.GYRO_kVoltsPerDegreePerSecond);
+    drivetrainGyro.calibrate();
 
     differentialDrive = new DifferentialDrive(rightSpark1, leftSpark1);
   }

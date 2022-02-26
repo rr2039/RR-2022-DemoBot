@@ -7,9 +7,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -18,12 +20,18 @@ public class Intake extends SubsystemBase {
   private TalonSRX intakeArm = null;
   private TalonSRX intakeEnd = null;
   private DoubleSolenoid intakeSolenoid = null;
+  private DigitalInput intakePhotoEye = null;
 
   /** Creates a new Intake. */
   public Intake() {
     intakeArm = new TalonSRX(Constants.INTAKE_ARM_TALON);
     intakeEnd = new TalonSRX(Constants.INTAKE_END_TALON);
     intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.INTAKE_SOLENOID1, Constants.INTAKE_SOLENOID2);
+    intakePhotoEye = new DigitalInput(0);
+  }
+
+  public boolean ballInIntake() {
+    return !intakePhotoEye.get();
   }
 
   public void intakeOn() {
@@ -47,5 +55,6 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("BallInIntake", ballInIntake());
   }
 }
