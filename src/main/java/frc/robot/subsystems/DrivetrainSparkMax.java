@@ -10,6 +10,10 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -38,6 +42,8 @@ public class DrivetrainSparkMax extends SubsystemBase implements Drivetrain {
 
   double openRampRate = 0.2;
   double closedRampRate = 2.0;
+
+  private final DifferentialDriveOdometry m_odometry;
 
   /** Creates a new DrivetrainSparkMax. */
   public DrivetrainSparkMax() {
@@ -74,6 +80,8 @@ public class DrivetrainSparkMax extends SubsystemBase implements Drivetrain {
     drivetrainGyro.calibrate();
 
     differentialDrive = new DifferentialDrive(rightSpark1, leftSpark1);
+
+    m_odometry = new DifferentialDriveOdometry(drivetrainGyro.getRotation2d());
   }
 
   @Override
@@ -86,6 +94,8 @@ public class DrivetrainSparkMax extends SubsystemBase implements Drivetrain {
     SmartDashboard.putNumber("D", rightPID.getD());
     SmartDashboard.putNumber("Gyro Pos", drivetrainGyro.getAngle());
     SmartDashboard.putNumber("Gyro Rate", drivetrainGyro.getRate());
+    m_odometry.update(
+        drivetrainGyro.getRotation2d(), leftEnc.getPosition(), rightEnc.getPosition());
   }
 
   public void setMotors(double left, double right) {
@@ -130,5 +140,28 @@ public class DrivetrainSparkMax extends SubsystemBase implements Drivetrain {
 
   public void arcadeDrive(double moveSpeed, double rotateSpeed) {
     differentialDrive.arcadeDrive(moveSpeed, rotateSpeed);
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(leftEnc.getVelocity()*0.0254, rightEnc.getVelocity()*0.0254);
+  }
+
+  public double getHeading() {
+    return drivetrainGyro.getYaw();
+  }
+
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
+  }
+
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    leftSpark1.setVoltage(leftVolts);
+    rightSpark1.setVoltage(rightVolts);
+    differentialDrive.feed();
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    m_odometry.resetPosition(pose, drivetrainGyro.getRotation2d());
   }
 }

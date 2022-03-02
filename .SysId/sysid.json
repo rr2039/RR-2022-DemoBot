@@ -1,6 +1,7 @@
 {
   "SysId": {
-    "Analysis Type": "Drivetrain",
+    "Analysis Type": "General Mechanism",
+    "AnalyzerJSONLocation": "C:\\Users\\conno\\OneDrive\\Documents\\RockfordRobotics\\sysid_data20220226-152701.json",
     "NetworkTables Settings": {
       "serverTeam": "2039"
     },

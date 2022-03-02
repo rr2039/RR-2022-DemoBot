@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -83,6 +85,36 @@ public class DrivetrainTalon extends SubsystemBase implements Drivetrain {
 
   @Override
   public void setMotors(double left, double right) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public double getHeading() {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public Pose2d getPose() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void resetOdometry(Pose2d pose) {
     // TODO Auto-generated method stub
     
   }
